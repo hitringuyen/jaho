@@ -9,7 +9,6 @@ import 'package:jaho/blocs/user_view_bloc.dart';
 import 'package:jaho/extensions/string_extension.dart';
 import 'package:jaho/repositorys/user_avatar_repository.dart';
 import 'package:jaho/widgets/user_line_widget.dart';
-import 'package:observer/observer.dart';
 
 import '../blocs/count_bloc.dart';
 import '../blocs/user_bloc.dart';
@@ -167,7 +166,7 @@ class MainHomeState extends State<MainHomeWidget>
               final index = (state.listUser.length - BlocProvider
                   .of<UserBloc>(context)
                   .user!
-                  .total_pages) / 2 + 1;
+                  .per_page) / 2 + 1;
               final target = contentSize * index / state.listUser.length;
               _controller.position.animateTo(
                 target,
@@ -198,7 +197,8 @@ class MainHomeState extends State<MainHomeWidget>
                     }
                   } else {
                     if(notification is ScrollEndNotification) {
-                      if(running==false) {
+                      if(running==false
+                          &&context.read<UserBloc>().user!.page<context.read<UserBloc>().user!.total_pages) {
                         running = true;
                         context.read<UserBloc>().add(GetUserEvent());
                       }
@@ -257,7 +257,7 @@ class MainHomeState extends State<MainHomeWidget>
             final index = (state.listUser.length-BlocProvider
                 .of<UserBloc>(context)
                 .user!
-                .total_pages) + 1;
+                .per_page) + 1;
             final target = contentSize * index / state.listUser.length;
             _controller.position.animateTo(
               target,
