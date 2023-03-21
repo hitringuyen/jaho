@@ -103,7 +103,8 @@ class MainHomeState extends State<MainHomeWidget>
                       }
                     } else {
                       if(notification is ScrollEndNotification) {
-                        if(running==false) {
+                        if(running==false
+                            &&context.read<UserBloc>().user!.page<context.read<UserBloc>().user!.total_pages) {
                           running = true;
                           context.read<UserBloc>().add(GetUserEvent());
                         }
